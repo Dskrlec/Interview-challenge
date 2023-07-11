@@ -1,0 +1,49 @@
+<div class="mat-elevation-z8">
+ <div style="justify-content: end; display: flex;  padding: 20px; align-items: baseline;">
+
+  <mat-form-field appearance="outline">
+    <mat-label>Filter by User</mat-label>
+    <mat-select [(value)]="selectedUser" (selectionChange)="applyFilter()">
+     <mat-option *ngFor="let user of users" [value]="user.user_name">
+      {{ user.user_name }}
+     </mat-option>
+    </mat-select>
+   </mat-form-field>
+  <button mat-raised-button color="primary" (click)="onClearFilter()" style="margin-left: 5px;">Clear filter</button>
+ 
+</div>
+
+  <table mat-table [dataSource]="dataSource" style="width: 100%; background-color: #f8f9fa">
+    
+    <ng-container matColumnDef="user_name">
+    <th mat-header-cell *matHeaderCellDef>User Name</th>
+    <td mat-cell *matCellDef="let user" style="color: blue; font-weight: 500;">{{ user.user_name }}</td>
+   </ng-container>
+ 
+   <ng-container matColumnDef="working_hours">
+    <th mat-header-cell *matHeaderCellDef>Working Hours</th>
+    <td mat-cell *matCellDef="let user">{{ user.working_hours.start }} - {{ user.working_hours.end }}</td>
+   </ng-container>
+
+   <ng-container matColumnDef="meetings">
+    <th mat-header-cell *matHeaderCellDef>Meetings</th>
+    <td mat-cell *matCellDef="let user">
+     <div *ngFor="let event of user.events" style="margin: 5px;">
+      {{ event.title }}
+     </div>
+    </td>
+   </ng-container>
+ 
+   <ng-container matColumnDef="events">
+    <th mat-header-cell *matHeaderCellDef>Events</th>
+    <td mat-cell *matCellDef="let user">
+     <div *ngFor="let event of user.events" style="margin: 5px;">
+       {{ event.start | date: 'HH:mm:ss' : (event.start | slice:-5).toString() }} - {{ event.end | date: 'HH:mm:ss' : (event.end | slice:-5).toString() }}
+     </div>
+    </td>
+   </ng-container>
+ 
+   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+   <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+ </div>
